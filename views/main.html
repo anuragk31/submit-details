@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script type="text/javascript" src="/static/scripts/main.js"></script>
+  <style>
+    .hidden {
+      display: none !important;
+    }
+    .duplicateError{
+      color: red;
+      font-style: normal;
+      font-weight: bold;
+    }
+    .successMsg{
+      color: green;
+      font-style: normal;
+      font-weight: bold;
+    }
+    label.r::after{
+      content: " *";
+      color: red;
+      vertical-align: sub;
+    }
+    div.col-md-20 {
+      max-width: 20%;
+      padding-left: 0;
+    }
+    div.col-md-80 {
+      max-width: 80%;
+      min-width: 80%;
+      padding-right: 0px;
+    }
+    div.row{
+      margin-bottom: 15px;
+    }
+
+    div.container {
+      max-width: 80%;
+    }
+    @media (min-width: 1200px){
+      div.container {
+        max-width: 720px;
+      }
+    }
+
+    @media (min-width: 992px){
+      div.container {
+        max-width: 720px;
+      }
+    }
+  </style>
+  <title>Details!</title>
+</head>
+
+<body>
+  <div class="hidden duplicateError text-center py-4"> Phone number already exists!!!</div>
+  <div class="hidden successMsg text-center py-4"> Record Saved Successfully.</div>
+  <div class="container">
+    <h4 class="py-3 text-center">Details</h4>
+    <form class="needs-validation" novalidate="">
+      <div class="row">
+        <div class="col-md-6 mb-3 col-md-20">
+          <label class="r" for="city">City</label>
+        </div>
+        <div class="col-md-6 mb-3 col-md-80">
+          <select class="custom-select form-control d-block w-100" id="city" name="city" required="">
+            <option value="">Choose... </option>
+            <option>Bangalore</option>
+            <option>Delhi</option>
+            <option>Mumbai</option>
+            <option>Hyderabad</option>
+            <option>Chennai</option>
+            <option>Pune</option>
+          </select>
+          <div class="invalid-feedback">
+            Valid city is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label class="r" for="phone2">Phone number of the Respondent</label>
+        <input type="number" class="form-control" id="phone2" name="phone2" min="6000000000" max="9999999999" required="">
+        <div class="invalid-feedback">
+          Please enter a valid phone number.
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label class="r" for="phone1">Phone number of the User</label>
+        <input type="number" class="form-control" id="phone1" name="phone1" min=6000000000 max=9999999999 required="">
+        <div class="invalid-feedback">
+          Please enter a valid phone number.
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3 col-md-20">
+          <label class="r" for="userType">User Type</label>
+        </div>
+        <div class="col-md-6 mb-3 col-md-80">
+          <select class="custom-select form-control d-block w-100" name="userType" id="userType" required="">
+            <option value="">Choose... </option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+            <option>F</option>
+          </select>
+          <div class="invalid-feedback">
+            Valid city is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label class="r" for="area">Area</label>
+        <input type="text" class="form-control" id="area" name="area" required="">
+        <div class="invalid-feedback">
+          Please enter a valid area.
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="remarks">Remarks <span class="text-muted">(Optional)</span></label>
+        <input type="text" class="form-control" name="remarks" id="remarks" placeholder="You can give your suggestions here">
+      </div>
+
+      <hr class="mb-4 row">
+      <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
+    </form>
+  </div>
+</body>
+
+</html>

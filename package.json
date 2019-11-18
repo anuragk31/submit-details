@@ -1,0 +1,29 @@
+{
+  "name": "submit-details",
+  "description": "Demo app to submit user details",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "author": "anuragk",
+  "engines": {
+    "node": ">=8"
+  },
+  "repository": "https://github.com/anuragk31/submit-details",
+  "main": "app.js",
+  "private": true,
+  "cloud-repo-tools": {
+    "requiresKeyFile": true,
+    "requiresProjectId": true
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "@google-cloud/datastore": "^4.0.0",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "@google-cloud/nodejs-repo-tools": "^3.0.0",
+    "ava": "^0.25.0",
+    "proxyquire": "^2.1.0"
+  }
+}
