@@ -14,11 +14,35 @@ app.disable('etag');
 app.set('trust proxy', true);
 
 
+app.get('/api/download/csv', (req, res) => {
+  model.list(5000, (err, savedData) => {
+    if (err) {
+      res.status(500).send(err);
+      return;
+    }
+    res.setHeader('Content-disposition', 'attachment; filename=data.csv');
+    res.setHeader('Content-type', "text/csv;charset=utf-8");
+
+    let headerAdded =  false, csvData = "";
+    csvData = savedData.map(e=>{
+      let line = "";
+      if(!headerAdded){
+        line += Object.keys(e).join(",") + "\n"
+        headerAdded = true;
+      }
+      line += Object.values(e).join(",");
+      return line;
+    }).join("\n");
+    res.status(200).send(csvData);
+  });
+});
+
 app.post('/api/save', (req, res) => {
-  debugger;
   const data = req.body;
-  data.ip1 = req.client.localAddress;
-  data.ip2 = req.client.remoteAddress;
+  data.ip = req.headers['x-forwarded-for'] ||
+     req.connection.remoteAddress ||
+     req.socket.remoteAddress ||
+     (req.connection.socket ? req.connection.socket.remoteAddress : null);;
   let ID = data.phone1;
   model.read(ID, (err, savedData) => {
     if (err) {

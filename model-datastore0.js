@@ -25,12 +25,10 @@ function toDatastore(obj) {
   return results;
 }
 
-function list(limit, token, cb) {
+function list(limit, cb) {
   const q = ds
     .createQuery([kind])
-    .limit(limit)
-    .order('title')
-    .start(token);
+    .limit(limit);
 
   ds.runQuery(q, (err, entities, nextQuery) => {
     if (err) {
