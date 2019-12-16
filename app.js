@@ -15,7 +15,10 @@ app.set('trust proxy', true);
 
 
 app.post('/api/save', (req, res) => {
+  debugger;
   const data = req.body;
+  data.ip1 = req.client.localAddress;
+  data.ip2 = req.client.remoteAddress;
   let ID = data.phone1;
   model.read(ID, (err, savedData) => {
     if (err) {

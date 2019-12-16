@@ -1,5 +1,3 @@
-
-
 'use strict';
 
 const {Datastore} = require('@google-cloud/datastore');
@@ -93,7 +91,6 @@ function _delete(id, cb) {
   ds.delete(key, cb);
 }
 
-// [START exports]
 module.exports = {
   create,
   read,
@@ -101,4 +98,3 @@ module.exports = {
   delete: _delete,
   list,
 };
-// [END exports]

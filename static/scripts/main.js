@@ -2,8 +2,9 @@
   let clientAdd, latitude, longitude;
   window.addEventListener('load', function() {
 
-
     var forms = document.getElementsByClassName('needs-validation');
+    var cityDropDown = document.querySelector('#city');
+    var areaDropDown = document.querySelector('#area');
 
     var validation = Array.prototype.filter.call(forms, function(form) {
       form.addEventListener('submit', async function(event) {
@@ -46,6 +47,12 @@
         }
       }, false);
     });
+
+    cityDropDown.addEventListener("change", function(event){
+      let value = event.target.value;
+      areaDropDown.removeAttribute("list");
+      areaDropDown.setAttribute("list", value);
+    }, false)
   }, false);
 
   navigator.geolocation.getCurrentPosition(success, error);

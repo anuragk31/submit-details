@@ -54,14 +54,14 @@
       }
     }
   </style>
-  <title>Details!</title>
+  <title>Lalamove User Response Form!</title>
 </head>
 
 <body>
   <div class="hidden duplicateError text-center py-4"> Phone number already exists!!!</div>
   <div class="hidden successMsg text-center py-4"> Record Saved Successfully.</div>
   <div class="container">
-    <h4 class="py-3 text-center">Details</h4>
+    <h4 class="py-3 text-center">Lalamove User Response Form</h4>
     <form class="needs-validation" novalidate="">
       <div class="row">
         <div class="col-md-6 mb-3 col-md-20">
@@ -106,22 +106,81 @@
         <div class="col-md-6 mb-3 col-md-80">
           <select class="custom-select form-control d-block w-100" name="userType" id="userType" required="">
             <option value="">Choose... </option>
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-            <option>F</option>
+            <option>Electrical/Electronics/Home Appliances</option>
+            <option>Machines/Equipment/Spare Parts/Metals</option>
+            <option>Furniture/Home Furnishing</option>
+            <option>Paper/Packaging/Printed Material</option>
+            <option>Ceramics/Sanitary/Hardware</option>
+            <option>Plastic/Rubber</option>
+            <option>FMCG/Food Products</option>
+            <option>Pharmacy/Medical/Healthcare/Fitness Equipment</option>
+            <option>Chemicals/Paints</option>
+            <option>Textile/Garments/Fashion Accessories</option>
+            <option>Building/Construction</option>
+            <option>Books/Stationery/Toys/Gifts</option>
+            <option>Houseware Supplies</option>
+            <option>Catering/Restaurants/Event Management</option>
+            <option>Timber/Plywood/Laminate</option>
+            <option>Logistics Service Provider/Packers & Movers</option>
+            <option>House Shifting</option>
           </select>
           <div class="invalid-feedback">
-            Valid city is required.
+            Valid User Type is required.
           </div>
         </div>
       </div>
 
       <div class="mb-3 row">
         <label class="r" for="area">Area</label>
-        <input type="text" class="form-control" id="area" name="area" required="">
+        <input class="form-control" id="area" name="area" autocomplete="off" required="">
+        <datalist id="Bangalore">
+            <option value="Bangalore Area 1">
+            <option value="Bangalore Area 2">
+            <option value="Bangalore Area 3">
+            <option value="Bangalore Area 4">
+            <option value="Bangalore Area 5">
+            <option value="Bangalore Area 6">
+        </datalist>
+        <datalist id="Delhi">
+            <option value="Delhi Area 1">
+            <option value="Delhi Area 2">
+            <option value="Delhi Area 3">
+            <option value="Delhi Area 4">
+            <option value="Delhi Area 5">
+            <option value="Delhi Area 6">
+        </datalist>
+        <datalist id="Mumbai">
+            <option value="Mumbai Area 1">
+            <option value="Mumbai Area 2">
+            <option value="Mumbai Area 3">
+            <option value="Mumbai Area 4">
+            <option value="Mumbai Area 5">
+            <option value="Mumbai Area 6">
+        </datalist>
+        <datalist id="Hyderabad">
+            <option value="Hyderabad Area 1">
+            <option value="Hyderabad Area 2">
+            <option value="Hyderabad Area 3">
+            <option value="Hyderabad Area 4">
+            <option value="Hyderabad Area 5">
+            <option value="Hyderabad Area 6">
+        </datalist>
+        <datalist id="Chennai">
+            <option value="Chennai Area 1">
+            <option value="Chennai Area 2">
+            <option value="Chennai Area 3">
+            <option value="Chennai Area 4">
+            <option value="Chennai Area 5">
+            <option value="Chennai Area 6">
+        </datalist>
+        <datalist id="Pune">
+            <option value="Pune Area 1">
+            <option value="Pune Area 2">
+            <option value="Pune Area 3">
+            <option value="Pune Area 4">
+            <option value="Pune Area 5">
+            <option value="Pune Area 6">
+        </datalist>
         <div class="invalid-feedback">
           Please enter a valid area.
         </div>
