@@ -23,16 +23,22 @@ app.get('/api/download/csv', (req, res) => {
     res.setHeader('Content-disposition', 'attachment; filename=data.csv');
     res.setHeader('Content-type', "text/csv;charset=utf-8");
 
-    let headerAdded =  false, csvData = "";
-    csvData = savedData.map(e=>{
-      let line = "";
-      if(!headerAdded){
-        line += Object.keys(e).join(",") + "\n"
-        headerAdded = true;
-      }
-      line += Object.values(e).join(",");
-      return line;
-    }).join("\n");
+    var csvHeaderCollection = {
+      phone1: "User Phone Number",
+      userType: "User Type",
+      phone2: "Respondent phone Number",
+      area: "Area",
+      city: "City",
+      address: "Full Address",
+      ip: "IP Address",
+      latitude: "latitude",
+      longitude: "longitude",
+      remarks: "Remarks"
+    }
+    var csvListID = ["phone1", "userType", "phone2", "area", "city", "address", "ip", "latitude", "longitude", "remarks"];
+    var csvData = "";
+    csvData += csvListID.map(id => csvHeaderCollection[id]).join(",") + "\n";
+    csvData += savedData.map(entry => csvListID.map(id => "\"" + (entry[id] || "") + "\"").join(",")).join("\n");
     res.status(200).send(csvData);
   });
 });
