@@ -26,7 +26,7 @@ app.get('/api/download/csv', (req, res) => {
     var csvHeaderCollection = {
       phone1: "User Phone Number",
       userType: "User Type",
-      phone2: "Respondent phone Number",
+      phone2: "BDE Pin",
       area: "Area",
       city: "City",
       address: "Full Address",
