@@ -1,3 +1,4 @@
+
 (function() {
   let clientAdd, latitude, longitude;
   window.addEventListener('load', function() {
