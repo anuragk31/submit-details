@@ -48,6 +48,7 @@ function checkupload(total, fail, pass, res){
   console.log(`\n ${fail + pass} of ${total} records processed, ${pass} passed and ${fail} failed`);
   //res.write(`\n ${fail + pass} of ${total} records processed, ${pass} passed and ${fail} failed`);
   if(total == fail + pass){
+      res.write(`${total} records processed, ${pass} passed and ${fail} failed`);
       res.end();
       res.status(200);
   }
