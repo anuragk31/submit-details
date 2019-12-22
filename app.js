@@ -3,6 +3,7 @@
 const path = require('path');
 const express = require('express');
 const model = require('./model-datastore0');
+const fs = require('fs');
 
 const app = express();
 
@@ -40,6 +41,47 @@ app.get('/api/download/csv', (req, res) => {
     csvData += csvListID.map(id => csvHeaderCollection[id]).join(",") + "\n";
     csvData += savedData.map(entry => csvListID.map(id => "\"" + (entry[id] || "") + "\"").join(",")).join("\n");
     res.status(200).send(csvData);
+  });
+});
+
+function checkupload(total, fail, pass, res){
+  console.log(`\n ${fail + pass} of ${total} records processed, ${pass} passed and ${fail} failed`);
+  //res.write(`\n ${fail + pass} of ${total} records processed, ${pass} passed and ${fail} failed`);
+  if(total == fail + pass){
+      res.end();
+      res.status(200);
+  }
+}
+
+
+app.get('/api/upload/status', (req, res) => {
+  const stringContent = fs.readFileSync('import/data.csv', 'utf8');
+  const arrayContent = stringContent.split("\n");
+  let resData = [], fail = 0, pass = 0;
+  arrayContent.forEach(row=>{
+    if(row && row.length == 10){
+      let data = {};
+      data.phone1 = row;
+      data.manualUpload = true;
+      let ID = data.phone1;
+      model.read(ID, (err, savedData) => {
+        if (err) {
+          model.create(ID, data, (err, savedData) => {
+            if (err) {
+              checkupload(arrayContent.length, ++fail, pass, res);
+            }
+            else{
+              checkupload(arrayContent.length, fail, ++pass, res);
+            }
+          });
+        }else{
+          checkupload(arrayContent.length, ++fail, pass, res);
+        }
+      });
+    }
+    else{
+      checkupload(arrayContent.length, ++fail, pass, res);
+    }
   });
 });
 
