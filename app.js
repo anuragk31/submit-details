@@ -62,14 +62,14 @@ function checkupload(total, fail, pass, res, errMsg){
 app.get('/api/upload/status', (req, res) => {
     const stringContent = fs.readFileSync('import/data.csv', 'utf8');
     const arrayContent = stringContent.split("\n");
-    let resData = [], fail = 0, pass = 0;
+    let fail = 0, pass = 0;
 
     let dataIndex = 0;
     let cancelIntervalID = setInterval(()=>{
-        if(dataIndex == resData.length){
+        if(dataIndex == arrayContent.length){
             clearInterval(cancelIntervalID);
         }
-        let row = resData[dataIndex];
+        let row = arrayContent[dataIndex];
         if(row && row.length == 10){
             let data = {};
             data.phone1 = row;
