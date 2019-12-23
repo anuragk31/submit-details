@@ -16,7 +16,7 @@ app.set('trust proxy', true);
 
 
 app.get('/api/download/csv', (req, res) => {
-  model.list(5000, (err, savedData) => {
+  model.list(50000, (err, savedData) => {
     if (err) {
       res.status(500).send(err);
       return;
