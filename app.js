@@ -44,14 +44,18 @@ app.get('/api/download/csv', (req, res) => {
   });
 });
 
-function checkupload(total, fail, pass, res){
-  console.log(`\n ${fail + pass} of ${total} records processed, ${pass} passed and ${fail} failed`);
-  //res.write(`\n ${fail + pass} of ${total} records processed, ${pass} passed and ${fail} failed`);
-  if(total == fail + pass){
+function checkupload(total, fail, pass, res, errMsg){
+	if(errMsg){
+		console.log("Error");
+		console.log(errMsg);
+	}
+	console.log(`\n ${fail + pass} of ${total} records processed, ${pass} passed and ${fail} failed`);
+	//res.write(`\n ${fail + pass} of ${total} records processed, ${pass} passed and ${fail} failed`);
+	if(total == fail + pass){
       res.write(`${total} records processed, ${pass} passed and ${fail} failed`);
       res.end();
       res.status(200);
-  }
+	}
 }
 
 
@@ -69,19 +73,19 @@ app.get('/api/upload/status', (req, res) => {
         if (err) {
           model.create(ID, data, (err, savedData) => {
             if (err) {
-              checkupload(arrayContent.length, ++fail, pass, res);
+              checkupload(arrayContent.length, ++fail, pass, res, ID +": create error"+ err);
             }
             else{
               checkupload(arrayContent.length, fail, ++pass, res);
             }
           });
         }else{
-          checkupload(arrayContent.length, ++fail, pass, res);
+          checkupload(arrayContent.length, ++fail, pass, res, ID + ": duplicate entry");
         }
       });
     }
     else{
-      checkupload(arrayContent.length, ++fail, pass, res);
+      checkupload(arrayContent.length, ++fail, pass, res, row + ": Invalid number");
     }
   });
 });
