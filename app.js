@@ -44,18 +44,13 @@ app.get('/api/download/csv', (req, res) => {
     });
 });
 
-function checkupload(total, fail, pass, res, errMsg){
+function checkupload(total, fail, pass, errMsg){
     if(errMsg){
         console.log("Error");
         console.log(errMsg);
     }
     console.log(`\n ${fail + pass} of ${total} records processed, ${pass} passed and ${fail} failed`);
     //res.write(`\n ${fail + pass} of ${total} records processed, ${pass} passed and ${fail} failed`);
-    if(total == fail + pass){
-        res.write(`${total} records processed, ${pass} passed and ${fail} failed`);
-        res.end();
-        res.status(200);
-    }
 }
 
 
@@ -79,23 +74,23 @@ app.get('/api/upload/status', (req, res) => {
                 if (err) {
                     model.create(ID, data, (err, savedData) => {
                         if (err) {
-                            checkupload(arrayContent.length, ++fail, pass, res, ID +": create error"+ err);
+                            checkupload(arrayContent.length, ++fail, pass, ID +": create error"+ err);
                         }
                         else{
-                            checkupload(arrayContent.length, fail, ++pass, res);
+                            checkupload(arrayContent.length, fail, ++pass);
                         }
                     });
                 }else{
-                    checkupload(arrayContent.length, ++fail, pass, res, ID + ": duplicate entry");
+                    checkupload(arrayContent.length, ++fail, pass, ID + ": duplicate entry");
                 }
             });
         }
         else{
-            checkupload(arrayContent.length, ++fail, pass, res, row + ": Invalid number");
+            checkupload(arrayContent.length, ++fail, pass, row + ": Invalid number");
         }
         dataIndex++
-    }, 500)
-
+    }, 500);
+	res.status(200).send(`Job is submitted to upload  ${arrayContent.length} records. It will take around {arrayContent.length/2} minutes to complete`);
 });
 
 app.post('/api/save', (req, res) => {
