@@ -82,18 +82,22 @@ app.get('/api/upload/status', (req, res) => {
                                 batchProcessed++;
                                 processed++;
                                 if (err) {
+                                    fail++;
                                     checkupload(arrayContent.length, ID + ": create error" + err);
                                 } else {
+                                    pass++;
                                     checkupload(arrayContent.length);
                                 }
                             });
                         } else {
                             batchProcessed++;
                             processed++;
+                            duplicate++;
                             checkupload(arrayContent.length, ID + ": duplicate entry");
                         }
                     });
                 } else {
+                    invalid++;
                     batchProcessed++;
                     processed++;
                     checkupload(arrayContent.length, row + ": Invalid number");
