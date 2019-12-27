@@ -34,9 +34,10 @@ app.get('/api/download/csv', (req, res) => {
             ip: "IP Address",
             latitude: "latitude",
             longitude: "longitude",
+            date: "Date",
             remarks: "Remarks"
         };
-        let csvListID = ["phone1", "userType", "phone2", "area", "city", "address", "ip", "latitude", "longitude", "remarks"];
+        let csvListID = ["phone1", "userType", "date", "phone2", "area", "city", "address", "ip", "latitude", "longitude", "remarks"];
         let csvData = "";
         csvData += csvListID.map(id => csvHeaderCollection[id]).join(",") + "\n";
         csvData += savedData.map(entry => csvListID.map(id => "\"" + (entry[id] || "") + "\"").join(",")).join("\n");
@@ -44,53 +45,57 @@ app.get('/api/download/csv', (req, res) => {
     });
 });
 
-function checkupload(total, fail, pass, errMsg){
+function checkupload(total, errMsg){
     if(errMsg){
         console.log("Error");
         console.log(errMsg);
     }
-    console.log(`\n ${fail + pass} of ${total} records processed, ${pass} passed and ${fail} failed`);
-    //res.write(`\n ${fail + pass} of ${total} records processed, ${pass} passed and ${fail} failed`);
 }
 
 
 app.get('/api/upload/status', (req, res) => {
     const stringContent = fs.readFileSync('import/data.csv', 'utf8');
     const arrayContent = stringContent.split("\n");
-    let fail = 0, pass = 0;
+    let fail = 0, duplicate = 0, invalid = 0, pass = 0;
 
     let dataIndex = 0;
-    let cancelIntervalID = setInterval(()=>{
-        if(dataIndex == arrayContent.length){
-            clearInterval(cancelIntervalID);
+    let cancelIntervalID = setInterval(() => {
+        let batchIndex = 0, batchLimit = 1000;
+        while (batchIndex < batchLimit) {
+            if (dataIndex >= arrayContent.length) {
+                clearInterval(cancelIntervalID);
+                res.status(200).send(`Out of ${arrayContent.length} records ${pass} records uploaded successfully, 
+                ${duplicate} failed because of duplicate entry, ${invalid} failed because of invalid number and ${fail} failed because 
+                of other reasons`);
+                break;
+            }
+
+            let row = arrayContent[dataIndex];
+            if (row && row.length == 10) {
+                let data = {};
+                data.phone1 = row;
+                data.manualUpload = true;
+                let ID = data.phone1;
+                model.read(ID, (err, savedData) => {
+                    if (err) {
+                        model.create(ID, data, (err, savedData) => {
+                            if (err) {
+                                checkupload(arrayContent.length, ID + ": create error" + err);
+                            } else {
+                                checkupload(arrayContent.length);
+                            }
+                        });
+                    } else {
+                        checkupload(arrayContent.length, ID + ": duplicate entry");
+                    }
+                });
+            } else {
+                checkupload(arrayContent.length, row + ": Invalid number");
+            }
+            dataIndex++;
+            batchIndex++;
         }
-        let row = arrayContent[dataIndex];
-        if(row && row.length == 10){
-            let data = {};
-            data.phone1 = row;
-            data.manualUpload = true;
-            let ID = data.phone1;
-            model.read(ID, (err, savedData) => {
-                if (err) {
-                    model.create(ID, data, (err, savedData) => {
-                        if (err) {
-                            checkupload(arrayContent.length, ++fail, pass, ID +": create error"+ err);
-                        }
-                        else{
-                            checkupload(arrayContent.length, fail, ++pass);
-                        }
-                    });
-                }else{
-                    checkupload(arrayContent.length, ++fail, pass, ID + ": duplicate entry");
-                }
-            });
-        }
-        else{
-            checkupload(arrayContent.length, ++fail, pass, row + ": Invalid number");
-        }
-        dataIndex++
     }, 500);
-	res.status(200).send(`Job is submitted to upload  ${arrayContent.length} records. It will take around {arrayContent.length/2} minutes to complete`);
 });
 
 app.post('/api/save', (req, res) => {
@@ -100,6 +105,8 @@ app.post('/api/save', (req, res) => {
         req.socket.remoteAddress ||
         (req.connection.socket ? req.connection.socket.remoteAddress : null);;
     let ID = data.phone1;
+    let date = new Date();
+    data.date = date.toLocaleString();
     model.read(ID, (err, savedData) => {
         if (err) {
             // Save the data to the database.
