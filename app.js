@@ -117,8 +117,7 @@ app.post('/api/save', (req, res) => {
         req.socket.remoteAddress ||
         (req.connection.socket ? req.connection.socket.remoteAddress : null);;
     let ID = data.phone1;
-    let date = new Date();
-    data.date = date.toLocaleString();
+    data.date = Date().toString();
     model.read(ID, (err, savedData) => {
         if (err) {
             // Save the data to the database.
