@@ -56,46 +56,54 @@ function checkupload(total, errMsg){
 app.get('/api/upload/status', (req, res) => {
     const stringContent = fs.readFileSync('import/data.csv', 'utf8');
     const arrayContent = stringContent.split("\n");
-    let fail = 0, duplicate = 0, invalid = 0, pass = 0;
+    let fail = 0, duplicate = 0, invalid = 0, pass = 0,  batchProcessed = 0, processed = 0, batchLimit = 500, batchIndex = 0;
 
     let dataIndex = 0;
     let cancelIntervalID = setInterval(() => {
-        let batchIndex = 0, batchLimit = 1000;
-        while (batchIndex < batchLimit) {
-            if (dataIndex >= arrayContent.length) {
-                clearInterval(cancelIntervalID);
-                res.status(200).send(`Out of ${arrayContent.length} records ${pass} records uploaded successfully, 
-                ${duplicate} failed because of duplicate entry, ${invalid} failed because of invalid number and ${fail} failed because 
-                of other reasons`);
-                break;
-            }
+        if( batchIndex == 0 || (batchProcessed >= batchIndex)){
+            batchIndex = 0;
+            while (batchIndex < batchLimit) {
+                if (processed >= arrayContent.length) {
+                    clearInterval(cancelIntervalID);
+                    res.status(200).send(`Out of ${arrayContent.length} records ${pass} records uploaded successfully,
+                    ${duplicate} failed because of duplicate entry, ${invalid} failed because of invalid number and ${fail} failed because
+                    of other reasons`);
+                    break;
+                }
+                let row = arrayContent[dataIndex];
+                if (row && row.length == 10) {
+                    let data = {};
+                    data.phone1 = row;
+                    data.manualUpload = true;
+                    let ID = data.phone1;
+                    model.read(ID, (err, savedData) => {
+                        if (err) {
+                            model.create(ID, data, (err, savedData) => {
+                                batchProcessed++;
+                                processed++;
+                                if (err) {
+                                    checkupload(arrayContent.length, ID + ": create error" + err);
+                                } else {
+                                    checkupload(arrayContent.length);
+                                }
+                            });
+                        } else {
+                            batchProcessed++;
+                            processed++;
+                            checkupload(arrayContent.length, ID + ": duplicate entry");
+                        }
+                    });
+                } else {
+                    batchProcessed++;
+                    processed++;
+                    checkupload(arrayContent.length, row + ": Invalid number");
+                }
+                dataIndex++;
+                batchIndex++;
 
-            let row = arrayContent[dataIndex];
-            if (row && row.length == 10) {
-                let data = {};
-                data.phone1 = row;
-                data.manualUpload = true;
-                let ID = data.phone1;
-                model.read(ID, (err, savedData) => {
-                    if (err) {
-                        model.create(ID, data, (err, savedData) => {
-                            if (err) {
-                                checkupload(arrayContent.length, ID + ": create error" + err);
-                            } else {
-                                checkupload(arrayContent.length);
-                            }
-                        });
-                    } else {
-                        checkupload(arrayContent.length, ID + ": duplicate entry");
-                    }
-                });
-            } else {
-                checkupload(arrayContent.length, row + ": Invalid number");
             }
-            dataIndex++;
-            batchIndex++;
         }
-    }, 500);
+    }, 1000);
 });
 
 app.post('/api/save', (req, res) => {
