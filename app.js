@@ -65,6 +65,10 @@ app.get('/api/upload/status', (req, res) => {
             while (batchIndex < batchLimit) {
                 if (processed >= arrayContent.length) {
                     clearInterval(cancelIntervalID);
+                    let timeLog = new Date((+new Date() + (330 * 60 * 1000))).toGMTString().replace("GMT", "IST");
+                    console.log(`At ${timeLog} : Out of ${arrayContent.length} records ${pass} records uploaded successfully,
+                    ${duplicate} failed because of duplicate entry, ${invalid} failed because of invalid number and ${fail} failed because
+                    of other reasons`);
                     res.status(200).send(`Out of ${arrayContent.length} records ${pass} records uploaded successfully,
                     ${duplicate} failed because of duplicate entry, ${invalid} failed because of invalid number and ${fail} failed because
                     of other reasons`);
@@ -117,7 +121,7 @@ app.post('/api/save', (req, res) => {
         req.socket.remoteAddress ||
         (req.connection.socket ? req.connection.socket.remoteAddress : null);;
     let ID = data.phone1;
-    data.date = Date().toString();
+    data.date = new Date((+new Date() + (330 * 60 * 1000))).toGMTString().replace("GMT", "IST");
     model.read(ID, (err, savedData) => {
         if (err) {
             // Save the data to the database.
