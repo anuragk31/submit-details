@@ -36,8 +36,13 @@ app.get('/api/download/csv', (req, res) => {
             longitude: "longitude",
             date: "Date",
             remarks: "Remarks"
+			Storeperownername: "Store/owner name"
+			Frequencyoforderperweek: "Frequency of order/week"
+			Competitorname: "Competitor name"
+			
+			
         };
-        let csvListID = ["phone1", "userType", "date", "phone2", "area", "city", "address", "ip", "latitude", "longitude", "remarks"];
+        let csvListID = ["phone1", "userType", "date", "phone2", "area", "city", "address", "ip", "latitude", "longitude", "remarks", "Storeperownername", "Frequencyoforderperweek", "Competitorname"];
         let csvData = "";
         csvData += csvListID.map(id => csvHeaderCollection[id]).join(",") + "\n";
         csvData += savedData.map(entry => csvListID.map(id => "\"" + (entry[id] || "") + "\"").join(",")).join("\n");
