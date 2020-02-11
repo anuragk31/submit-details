@@ -35,9 +35,9 @@ app.get('/api/download/csv', (req, res) => {
             latitude: "latitude",
             longitude: "longitude",
             date: "Date",
-            remarks: "Remarks"
-			Storeperownername: "Store/owner name"
-			Frequencyoforderperweek: "Frequency of order/week"
+            remarks: "Remarks",
+			Storeperownername: "Store/owner name",
+			Frequencyoforderperweek: "Frequency of order/week",
 			Competitorname: "Competitor name"
 			
 			
